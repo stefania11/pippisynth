@@ -49,10 +49,32 @@
 (printf "\n\n")
 
 ; EXAMPLE 5
-; solution: 
+; solution:
+(define (ex5-sketch coord depth)
+  ; `depth` is unused 
+  ; TODO: rewrite this sequence as a macro that repeats the body `depth` times.
+  ;       Think why the solution in `ex5-sketch2, which uses a loop, as opposed
+  ;       to a macro, doens't work as desired. 
+  (define coord1 (moving coord   #:depth 1)) 
+  (define coord2 (moving coord1  #:depth 1))
+  (define coord3 (moving coord2  #:depth 1))
+  (define coord4 (moving coord3  #:depth 1))
+  (define coord5 (moving coord4  #:depth 1))
+  (define coord6 (moving coord5  #:depth 1))
+  coord6
+  )
+
+(define (ex5-sketch2 coord depth)
+  (for ([i depth])
+    (set! coord (moving coord   #:depth 1)))
+  coord
+)
+
 (printf "EXAMPLE 5: \n----------\n")
 (define (go-diagonally-3 coord depth)
-  (moving coord #:depth depth))
+  ;(moving coord #:depth depth)
+  (ex5-sketch coord depth)
+  )
 
 (iterative-deepening check-diag-3 go-diagonally-3)
 (printf "\n\n")
