@@ -10,6 +10,7 @@
   check-diag-1
   check-diag-2
   check-diag-3
+  check-diag-n
 )
 
 
