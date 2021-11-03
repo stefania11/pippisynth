@@ -53,15 +53,4 @@
             (printf "no solution found\n")))
 
 #|
-solution:
-c=#f
-/Users/bodik/Documents/GitHub/pippisynth/synthesis-protype/exp-ras-printing.rkt:23:0
-'(define (ex1-sketch coord depth)
-   (define coord1 (if #t coord (moveRight coord)))  ; 'if' is not partially evaluated 
-   (define coord2 (if c coord1 (moveLeft coord1)))  ; 'c' is not evaluated here 
-   (define coord3 (moveUp coord2))
-   (define coord4 coord3)                           ; choose is evaluated and simplified 
-   (define coord5 (moveUp coord4))
-   (define coord6 (moveLeft coord5))
-   coord6)
 |#
