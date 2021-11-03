@@ -10,6 +10,8 @@
   check-diag-1
   check-diag-2
   check-diag-3
+  check-diag-3-p
+  check-diag-4
 )
 
 
@@ -58,4 +60,21 @@
     (check-diag-n 2 depth impl coord))
 
 (define (check-diag-3 depth impl coord)
-    (check-diag-n 3 depth impl coord))
+    (check-diag-n 3 depth impl coord)
+    ; (check-diag-3-p 3 depth impl (list 8 8))
+    )
+
+(define (check-diag-4 depth impl coord)
+    (check-diag-n 4 depth impl coord))
+
+; for specific coordinate
+(define (check-diag-3-p depth impl)
+    (define coord (list 8 8))
+    (define new-coord (impl coord depth))
+    (define new-x (list-ref new-coord 0))
+    (define new-y (list-ref new-coord 1))
+    (assert (= 5 new-x))
+    (assert (= 5 new-y)))
+
+(define-symbolic x y integer?) 
+(define symbol-coord (list x y))
