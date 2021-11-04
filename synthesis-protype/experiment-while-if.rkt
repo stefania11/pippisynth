@@ -19,13 +19,13 @@
 (define (is-at-top coord)
   (let ([x (list-ref coord 0)]
         [y (list-ref coord 1)])
-    (= x top-row)
+    (= y top-row)
     ))
 ; true if coord is outside (only checks the top)
 (define (is-out-of-bounds coord)
   (let ([x (list-ref coord 0)]
         [y (list-ref coord 1)])
-    (< x top-row)
+    (< y top-row)
     ))
 
 (define-grammar (conditional coord)
@@ -61,7 +61,7 @@
 (define sol-same
    (synthesize
          #:forall symbol-coord
-         #:guarantee (assert (implies (>= (car symbol-coord) 1)  ; we want a solution only when we start in a row that satisfies this precondition (play with this constant) 
+         #:guarantee (assert (implies (>= (list-ref symbol-coord 1) 1)  ; we want a solution only when we start in a row that satisfies this precondition (play with this constant) 
                                       ((curry check-diag-n 1) 0 ex1-sketch symbol-coord)))))
 (if (sat? sol-same)
         (begin 
