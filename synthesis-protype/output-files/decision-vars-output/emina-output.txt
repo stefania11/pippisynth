@@ -1,0 +1,18 @@
+Outputting SMT to file: /var/folders/vg/562_h05j6rzgxgfdzhj_p1_r0000gn/T/rosette16372037091637203709812.smt2
+Outputting SMT to file: /var/folders/vg/562_h05j6rzgxgfdzhj_p1_r0000gn/T/rosette16372037091637203709900.smt2
+Outputting SMT to file: /var/folders/vg/562_h05j6rzgxgfdzhj_p1_r0000gn/T/rosette16372037091637203709911.smt2
+Outputting SMT to file: /var/folders/vg/562_h05j6rzgxgfdzhj_p1_r0000gn/T/rosette16372037091637203709947.smt2
+Outputting SMT to file: /var/folders/vg/562_h05j6rzgxgfdzhj_p1_r0000gn/T/rosette16372037091637203709964.smt2
+Outputting SMT to file: /var/folders/vg/562_h05j6rzgxgfdzhj_p1_r0000gn/T/rosette16372037101637203710010.smt2
+
+
+prog 2 emina way: 
+'(#<procedure:moveUp> #<procedure:moveLeft>)
+
+
+prog 4 emina way: 
+'(#<procedure:moveUp> #<procedure:moveLeft> #<procedure:moveLeft> #<procedure:moveUp>)
+
+
+prog 6 emina way: 
+'(#<procedure:moveLeft> #<procedure:moveUp> #<procedure:moveUp> #<procedure:moveLeft> #<procedure:moveUp> #<procedure:moveLeft>)
