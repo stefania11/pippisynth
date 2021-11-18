@@ -90,7 +90,7 @@
   ; than 1 depth-4 grammar)
   (moving (moving (moving (moving coord #:depth 1) #:depth 1) #:depth 1) #:depth 1))
 
-; ssk1 ynthesized to move 2 up, 2 right:
+; sk1 synthesized to move 2 up, 2 right:
 (define (sol1 coord) (moveUp (moveRight (moveRight (moveUp coord)))))
 
 
