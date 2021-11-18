@@ -1,11 +1,14 @@
-racket_filename = "output-files/emina-trial.rkt"
-data_filename = "\"output-files/emina.csv\""
+racket_filename = "output-files/generated-racket-files/emina-trial-timing.rkt"
+data_filename = "\"output-files/timing-output/emina-timing.csv\""
+file_string = ""
 
-def eminaHeader(file_string):
+def eminaHeader():
+    global file_string
     file_string += "#lang rosette\n" + \
             "\n" + \
             "(require rosette/lib/angelic rosette/lib/destruct)\n" + \
             "(require 2htdp/batch-io)\n" + \
+            "(require racket/sandbox)\n" + \
             "\n" + \
             "(struct point (x y) #:transparent)\n" + \
             "\n" + \
@@ -46,13 +49,11 @@ def eminaHeader(file_string):
             "(set! outer-string (string-append outer-string \"type,size,time,program\\n\"))\n"
 
 
-    return file_string
-
-
-def eminaWayFunction(n, file_string):
+def eminaWayFunction(n):
+    global file_string
     assert(n % 2 == 0)
-    # print("(printf \"\\n=========================\\n\")")
-    # with open(racket_filename, "w") as file:
+    file_string += "\n\n; ------------------ \n(printf \"\\n\\nprog " + str(n) + " emina way: \\n\")\n"
+
     file_string += "(define prog" + str(n) + " (list\n"
     for j in range(n):
         file_string += "  (sym-op)\n"
@@ -67,32 +68,33 @@ def eminaWayFunction(n, file_string):
         "       (assert (= (point-x out) (- (point-x in) " + str(n//2) + ")))\n" + \
         "       (assert (= (point-y out) (- (point-y in) " + str(n//2) + "))))))\n" + \
         "\n"
+    file_string += "(evaluate prog" + str(n) + " sol" + str(n) + ")\n" 
     file_string += "(define after" + str(n) + " (current-inexact-milliseconds))\n"
     file_string += "(define time" + str(n) + " (- after" + str(n) + " before" + str(n) + "))\n"
     file_string += "(set! outer-string (string-append outer-string \"emina," + str(n) + ",\"))\n"
     file_string += "(set! outer-string (string-append outer-string (~s time" + str(n) + ")))\n"
     file_string += "(set! outer-string (string-append outer-string \",\"))\n"    
     file_string += "(set! outer-string (string-append outer-string (~s (evaluate prog" + str(n) + " sol" + str(n) + "))))\n" 
-    file_string += "(set! outer-string (string-append outer-string \"\\n\"))\n"    
-
-
-    # file_string += "(printf \"time: ~s\\n\" (- after" + str(n) + " before" + str(n) + " ))"
-    # file_string += "(printf \"\\n=========================\\n\")\n"
-    return file_string
+    file_string += "(set! outer-string (string-append outer-string \"\\n\"))\n"
 
 
 
 def doItAll():
-    file_string = eminaHeader("")
-    # file_string = eminaWayFunction(4, file_string)
-    # file_string = eminaWayFunction(6, file_string)
-    # file_string = eminaWayFunction(8, file_string)
-    # file_string = eminaWayFunction(10, file_string)
-    # file_string = eminaWayFunction(12, file_string)
-    # file_string = eminaWayFunction(14, file_string)
-    # file_string = eminaWayFunction(16, file_string)
-    # file_string = eminaWayFunction(18, file_string)
-    file_string = eminaWayFunction(20, file_string)
+    global file_string
+    eminaHeader()
+    eminaWayFunction(2)
+    eminaWayFunction(4)
+    eminaWayFunction(6)
+    # eminaWayFunction(8)
+    # eminaWayFunction(10)
+    # eminaWayFunction(12)
+    # eminaWayFunction(14)
+    # eminaWayFunction(16)
+    # eminaWayFunction(18)
+    # eminaWayFunction(20)
+    # eminaWayFunction(22)
+    # eminaWayFunction(24)
+    # eminaWayFunction(26)
     file_string += "(write-file " + data_filename + " outer-string)\n"
     with open(racket_filename, "w") as file:
         file.write(file_string)

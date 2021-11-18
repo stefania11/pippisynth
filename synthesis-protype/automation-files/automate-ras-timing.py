@@ -1,15 +1,18 @@
-racket_filename = "output-files/ras-trial.rkt"
-data_filename = "\"output-files/ras.csv\""
+racket_filename = "output-files/generated-racket-files/ras-trial-timing.rkt"
+data_filename = "\"output-files/timing-output/ras-timing.csv\""
+file_string = ""
 
-def rasHeader(file_string):
+def rasHeader():
+    global file_string
     file_string += "#lang rosette\n" + \
                 "(require rosette/lib/synthax)     ; Require the sketching library.\n" + \
                 "(require racket/match)\n" + \
                 "(require 2htdp/batch-io)\n" + \
                 "(error-print-width 10000000000)\n" + \
                 "(require \n" + \
-                "  \"../moving-grammar.rkt\"\n" + \
+                "  \"../../moving-grammar.rkt\"\n" + \
                 ")\n" + \
+                "(require racket/sandbox)\n" + \
                 "\n" + \
                 "(define-symbolic* x y integer?) \n" + \
                 "(define symbol-coord (list x y))\n" + \
@@ -26,10 +29,11 @@ def rasHeader(file_string):
                 "\n"+ \
                 "(define outer-string \"\")\n" + \
                 "(set! outer-string (string-append outer-string \"type,size,time,program\\n\"))\n"
-    return file_string
 
-def rasWayFunction(n, file_string):
+def rasWayFunction(n):
+    global file_string
     assert(n % 2 == 0)
+    file_string += "\n\n; ------------------ \n(printf \"\\n\\nprog " + str(n) + " ras way: \\n\")\n"
     file_string += "(define (prog-sketch" + str(n) + " coord0)" + "\n"
     for i in range(1, n+1):
         file_string += "  (define coord" + str(i) + " (moving coord" + str(i-1)+"   #:depth 1)) " + "\n"
@@ -50,19 +54,24 @@ def rasWayFunction(n, file_string):
     # file_string += "(set! outer-string (string-append outer-string \",\"))\n"    
     # file_string += "(set! outer-string (string-append outer-string (~s (print-forms sol" + str(n) + "))))\n" 
     file_string += "(set! outer-string (string-append outer-string \"\\n\"))\n"    
-    return file_string
+    file_string += "(print-forms sol" + str(n) + ")\n" 
 
 def doItAll():
-    file_string = rasHeader("")
-    # file_string = rasWayFunction(4, file_string)
-    # file_string = rasWayFunction(6, file_string)
-    # file_string = rasWayFunction(8, file_string)
-    # file_string = rasWayFunction(10, file_string)
-    # file_string = rasWayFunction(12, file_string)
-    # file_string = rasWayFunction(14, file_string)
-    # file_string = rasWayFunction(16, file_string)
-    # file_string = rasWayFunction(18, file_string)
-    file_string = rasWayFunction(20, file_string)
+    global file_string
+    rasHeader()
+    rasWayFunction(2)
+    rasWayFunction(4)
+    rasWayFunction(6)
+    # rasWayFunction(8)
+    # rasWayFunction(10)
+    # rasWayFunction(12)
+    # rasWayFunction(14)
+    # rasWayFunction(16)
+    # rasWayFunction(18)
+    # rasWayFunction(20)
+    # rasWayFunction(22)
+    # rasWayFunction(24)
+    # rasWayFunction(26)
     file_string += "(write-file " + data_filename + " outer-string)\n"
     with open(racket_filename, "w") as file:
         file.write(file_string)
