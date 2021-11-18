@@ -1,4 +1,4 @@
 type,size,time,program
-emina,2,57.573974609375,(#<procedure:moveUp> #<procedure:moveLeft>)
-emina,4,47.927978515625,(#<procedure:moveUp> #<procedure:moveLeft> #<procedure:moveLeft> #<procedure:moveUp>)
-emina,6,59.93701171875,(#<procedure:moveLeft> #<procedure:moveUp> #<procedure:moveUp> #<procedure:moveLeft> #<procedure:moveUp> #<procedure:moveLeft>)
+emina,2,42.0078125,(#<procedure:moveUp> #<procedure:moveLeft>)
+emina,4,44.7548828125,(#<procedure:moveUp> #<procedure:moveLeft> #<procedure:moveLeft> #<procedure:moveUp>)
+emina,6,56.953125,(#<procedure:moveLeft> #<procedure:moveUp> #<procedure:moveUp> #<procedure:moveLeft> #<procedure:moveUp> #<procedure:moveLeft>)
