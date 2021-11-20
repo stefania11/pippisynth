@@ -36,12 +36,12 @@
 (choose*  1 2 3 4 5)
 (vc)
 
-; Emnina's encoding. This just selects among the procedures. 
+; Emina's encoding. Part 1. This just selects among the procedures. 
 (clear-vc!)
 (sym-op)
 (vc)
 
-; Emnina's encoding. This selects among the procedures and calls the chosen procedure. 
+; Emina's encoding. Part 1 + Part 2. his selects among the procedures and calls the chosen procedure. 
 (clear-vc!)
 ((sym-op) x)
 (vc)
