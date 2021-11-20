@@ -39,9 +39,9 @@
 
 (define (ex2-sketch coord depth)
   (for/last ([i 20]) ; play with this value to control upper bound 
-      #:break (is-out-of-bounds coord)i)
-      (set! coord (moving coord #:depth 4))
-coord
+    #:break (is-out-of-bounds coord)
+    (set! coord (moving coord #:depth 4)))
+  coord
   ) 
 
 
