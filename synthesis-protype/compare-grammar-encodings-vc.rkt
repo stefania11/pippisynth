@@ -60,7 +60,3 @@
 (clear-vc!)
 (moving x #:depth 1) 
 (vc)
-
-
-
-
