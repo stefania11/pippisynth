@@ -93,6 +93,13 @@
 ; sk1 synthesized to move 2 up, 2 right:
 (define (sol1 coord) (moveUp (moveRight (moveRight (moveUp coord)))))
 
+(define (sk1-1 coord0)
+  (define coord1 (moving coord0   #:depth 1)) 
+  (define coord2 (moving coord1   #:depth 1)) 
+  (define coord3 (moving coord2   #:depth 1)) 
+  (define coord4 (moving coord3   #:depth 1)) 
+  coord4
+)
 
 ; sketch 2: loops
 
@@ -110,7 +117,7 @@
 (define (sk2 coord)
   (for-loop 2
             (lambda () (is-out-of-bounds coord))
-            (lambda () (set! coord (sk1 coord))))
+            (lambda () (set! coord (sk1-1 coord))))
   coord)
 
 ;
