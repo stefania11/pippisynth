@@ -32,31 +32,37 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 ;
 
+(printf "\n========\nBEFORE: \n")
 (clear-vc!)
 (choose*  1 2 3 4 5)
 (vc)
 
 ; Emina's encoding. Part 1. This just selects among the procedures. 
+(printf "\n========\nPART 1: \n")
 (clear-vc!)
 (sym-op)
 (vc)
 
-; Emina's encoding. Part 1 + Part 2. his selects among the procedures and calls the chosen procedure. 
+; Emina's encoding. Part 1 + Part 2. This selects among the procedures and calls the chosen procedure. 
+(printf "\n========\nPART 1 + PART 2: \n")
 (clear-vc!)
 ((sym-op) x)
 (vc)
 
 ; Our new grammar. Like the original but only 1-deep and uses choose*
+(printf "\n========\nCHOOSE*: \n")
 (clear-vc!)
 (moving-new x)
 (vc)
 
 ; Our orignal grammar. Depth 0 since the vc is quite large for depth 1. 
+(printf "\n========\nDEPTH 0: \n")
 (clear-vc!)
 (moving x #:depth 0) ; Depth 0  !!!!  Depth 1 is below. 
 (vc)
 
 ; Our orignal grammar. Depth 0 since the vc is quite large for depth 1. 
+(printf "\n========\nDEPTH 1: \n")
 (clear-vc!)
 (moving x #:depth 1) 
 (vc)
