@@ -111,8 +111,6 @@
     [(list x1 y1 x2 y2)
 
      (define new-coord (impl coord-start coord-end))
-     (define new-x (coord-x new-coord))
-     (define new-y (coord-y new-coord))
 
      (assert (implies 
                 (and
