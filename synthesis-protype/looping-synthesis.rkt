@@ -77,6 +77,7 @@
 ;   instead of already outside the bounds
 ;   I (darya) find this to be a better checker 
 ;   (we want to stop AT bounds, not once we're already outside them)
+;   THIS ISN'T USED BUT I WANTED TO INCLUDE FOR FURTHER EXPLORATION
 (define (is-at-bounds coord)
   (destruct coord
     [(list x y) (or 
@@ -112,7 +113,7 @@
      (define new-coord (impl coord-start coord-end))
      (define new-x (coord-x new-coord))
      (define new-y (coord-y new-coord))
-     
+
      (assert (implies 
                 (and
                     ; this is saying that (x2-7) <= x1 <= x2
