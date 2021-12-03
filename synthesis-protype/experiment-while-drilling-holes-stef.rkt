@@ -143,7 +143,7 @@
   (moving (moving (moving (moving coord #:depth 1) #:depth 1) #:depth 1) #:depth 1))
 
 ; sk1 synthesized to move 2 up, 2 right:
-;(define (sol1 coord) (moveUp (moveRight (moveRight (moveUp coord)))))
+(define (sol1 coord) (moveUp (moveRight (moveRight (moveUp coord)))))
 
 (define (sk1-1 coord0)
   (define coord1 (moving coord0   #:depth 1)) 
