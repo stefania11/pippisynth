@@ -13,12 +13,6 @@
 )
 
 
-
-(define-grammar (conditional)
-  [expr
-   (choose #f
-           #t)])
-
 (define-symbolic c boolean?)
 (define (ex1-sketch coord depth)
   (define coord1 (if (conditional) coord (moving coord   #:depth 1)))
@@ -52,5 +46,3 @@
         (begin
             (printf "no solution found\n")))
 
-#|
-|#

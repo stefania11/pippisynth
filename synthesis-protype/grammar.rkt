@@ -41,3 +41,19 @@
            (moveLeft (expr))
            (moveDown (expr))
            (moveRight (expr)))])
+
+(define-grammar (sameCoord coord1 coord2)
+    [expr
+        (choose (same-x coord1 coord2)
+                (same-y coord1 coord2)
+        )
+    ]
+)
+
+(define-grammar (oneLine coord1 coord2)
+    [expr
+        (choose (same-y coord1 coord2)
+                (notsame-x coord1 coord2)
+        )
+    ]
+)

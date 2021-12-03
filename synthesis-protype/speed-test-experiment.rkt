@@ -1,3 +1,6 @@
+;TODO add description file top 
+
+
 #lang rosette
 ; #lang rosette/safe
 
@@ -7,11 +10,14 @@
 )
 
 (require 
-  "moving-grammar.rkt" 
+  "grammar.rkt" 
+  "coordinates.rkt" 
+  "checker.rkt"
+
 )
 
-(require 2htdp/batch-io)
-(error-print-width 10000000000)
+(require 2htdp/batch-io) ; used for time measurement 
+(error-print-width 10000000000) ; used to print longer errror messages 
 
 
 
@@ -27,53 +33,9 @@
             (for-loop (sub1 n) break-cond body))]))
 
 
-;
-; Coordinate stuff
-;
-
-(define (fresh-sym-coord) 
-  (define-symbolic* x y integer?)   ; note the '*' in define-symbolic*
-  (list x y))
-
-(define (coord-equals coord coord2)
-  (destruct (append coord coord2)
-    [(list x y x2 y2)
-     (and (= x x2)
-          (= y y2))]))
-
-(define (coord-x coord)
-  (list-ref coord 0))
-
-(define (coord-y coord)
-  (list-ref coord 1))
-
-(define (coord-add coord coord2)
-  (destruct (append coord coord2)
-    [(list x y x2 y2)
-     (list (+ x x2)
-           (+ y y2))]))
 
 
-;
-; Various board position predicates 
-;
-
-(define top-row 0)  ; y coordinate of the top row
-(define bottom-row 250)
-(define left-col 0)
-(define right-col 250)
-
-; difference here is that we're checking if it is AT the bounds
-;  instead of already outside the bounds
-(define (is-at-bounds coord)
-  (destruct coord
-    [(list x y) (or 
-        (= y top-row)
-        (= y bottom-row)
-        (= x left-col)
-        (= x right-col)
-    )]))
-
+;TODO maybe rename checker functions and move them to checker file 
 (define (checker-implies n impl coord)
   (match coord
     [(list x y)
@@ -93,7 +55,7 @@
       ))
     ]))
 
-(define (checker n impl coord)
+(define (checker_new n impl coord)
   (match coord
     [(list x y)
      (define new-coord (impl coord))

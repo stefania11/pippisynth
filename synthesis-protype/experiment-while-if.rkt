@@ -8,32 +8,11 @@
 ; (require racket/pretty)
 ; (error-print-width 10000000000)
 (require 
-  "moving-grammar.rkt" 
-  "moving-checker.rkt"
+  "grammar.rkt" 
+  "checker.rkt"
   "iterative-deepening.rkt"
+  "coordinates.rkt"
 )
-
-(define top-row 0)  ; y coordinate of the top row
-; true if the coordinate is in the top row 
-(define (is-at-top coord)
-  (let ([x (list-ref coord 0)]
-        [y (list-ref coord 1)])
-    (= y top-row)
-    ))
-; true if coord is outside (only checks the top)
-(define (is-out-of-bounds coord)
-  (let ([x (list-ref coord 0)]
-        [y (list-ref coord 1)])
-    (< y top-row)))
-
-(define-symbolic c boolean?)
-
-(define-grammar (conditional coord)
-  [expr
-   (choose #f
-           #t
-           (is-at-top coord)
-           )])
 
 (define (ex2-sketch coord depth)
   (for/last ([i 20]) ; play with this value to control upper bound

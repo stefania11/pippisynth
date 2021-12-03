@@ -1,3 +1,5 @@
+;TODO add description file top 
+
 #lang rosette/safe
 
 (require
@@ -24,65 +26,9 @@
             (body)
             (for-loop (sub1 n) break-cond body))]))
 
-; call the custom for loop 
-(define cnt 0)
-(for-loop 5
-          (lambda () (= 3 cnt))
-          (lambda () (set! cnt (add1 cnt)) (display cnt)))
-; outputs 123'()
-
-;
-; Coordinate stuff
-;
-
-(define (fresh-sym-coord) 
-  (define-symbolic* x y integer?)   ; note the '*' in define-symbolic*
-  (list x y))
-
-(define (coord-equals coord coord2)
-  (destruct (append coord coord2)
-    [(list x y x2 y2)
-     (and (= x x2)
-          (= y y2))]))
-
-(define (coord-y coord)
-  (list-ref coord 1))
-
-(define (coord-add coord coord2)
-  (destruct (append coord coord2)
-    [(list x y x2 y2)
-     (list (+ x x2)
-           (+ y y2))]))
-
-; (coord-equals '(1 3) '(1 2))
-
-;
-; Various board position predicates 
-;
-
-(define top-row 0)  ; y coordinate of the top row
-; true if the coordinate is in the top row 
-(define (is-at-top coord)
-  (let ([x (list-ref coord 0)]
-        [y (list-ref coord 1)])
-    (= y top-row)
-    ))
-; true if coord is outside (only checks the top)
-(define (is-out-of-bounds coord)
-  (let ([x (list-ref coord 0)]
-        [y (list-ref coord 1)])
-    (< y top-row)))
-
-
-(define-grammar (conditional coord)
-  [expr
-   (choose #f
-           #t
-           (is-at-top coord)
-           )])
 
 ; TODO: procedures moveLeft etc should include assertions that fail the program if the
-;       move brings the character outside the board.
+;       move brings the character outside the board. 
 
 (define (sk1 coord)
   ; This will synthesize to up to four move statements. Implemented via a 
@@ -101,7 +47,7 @@
   coord4
 )
 
-; sketch 2: loops
+; Sketch 2: loops
 
 (define (sol2 coord)
   ; the loop updates the parameter coord, which we return at the end of sol2
@@ -121,7 +67,7 @@
   coord)
 
 ;
-; Solver stuff
+; Solver 
 ;
 
 (define symbol-coord (fresh-sym-coord))
