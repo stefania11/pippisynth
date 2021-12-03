@@ -43,13 +43,26 @@
 
 (define (same-x coord1 coord2)
   (destruct (append coord1 coord2)
-    [(list x1 y1 x2 y2)
-      (= x1 x2)]))
+    [(list x y x2 y2)
+      (= x x2)]))
 
 (define (same-y coord1 coord2)
   (destruct (append coord1 coord2)
     [(list x1 y1 x2 y2)
       (= y1 y2)]))
+
+
+
+(define (notsame-y coord1 coord2)
+  (destruct (append coord1 coord2)
+    [(list x1 y1 x2 y2)
+      (not = y1 y2)]))
+
+
+(define (notsame-x coord1 coord2)
+  (destruct (append coord1 coord2)
+    [(list x1 y1 x2 y2)
+      (not = x1 x2)]))
 
 ;
 ; Conditional grammar (new!!)
@@ -59,6 +72,16 @@
     [expr
         (choose (same-x coord1 coord2)
                 (same-y coord1 coord2)
+        )
+    ]
+)
+
+
+
+(define-grammar (bi-conditional2 coord1 coord2)
+    [expr
+        (choose (same-y coord1 coord2)
+                (notsame-x coord1 coord2)
         )
     ]
 )
@@ -78,6 +101,7 @@
 ;   I (darya) find this to be a better checker 
 ;   (we want to stop AT bounds, not once we're already outside them)
 ;   THIS ISN'T USED BUT I WANTED TO INCLUDE FOR FURTHER EXPLORATION
+; much appreciated (st3f)
 (define (is-at-bounds coord)
   (destruct coord
     [(list x y) (or 
@@ -101,6 +125,24 @@
     (lambda () (set! coord-curr (moving coord-curr #:depth 1))))
   coord-curr
 )
+
+    
+;
+; SKETCHES 2 try to get the points on the same line 
+;
+
+(define (sk-sameline coord-start coord-end)
+  (define coord-curr coord-start)
+  (for-loop 7
+    (lambda () (bi-conditional2 coord-curr coord-end #:depth 1))
+    (lambda () (set! coord-curr (moving coord-curr #:depth 1))))
+  (for-loop 7
+    (lambda () (bi-conditional2 coord-curr coord-end #:depth 1))
+    (lambda () (set! coord-curr (moving coord-curr #:depth 1))))
+  coord-curr
+)
+
+
 
 ;
 ; CHECKERS
@@ -128,6 +170,29 @@
   )
 )
 
+
+(define (checker-same-line impl coord-start coord-end)
+  (destruct (append coord-start coord-end)
+    [(list x1 y1 x2 y2)
+
+     (define new-coord (impl coord-start coord-end))
+
+     (assert (implies 
+                (and
+                    ; this is saying that (x2-7) <= x1 <= x2
+                    (<= x1 x2)
+                    (>= x1 (- x2 7))
+
+                    ; this is saying that (y2-7) <= y1 <= y2
+                    (<= y1 y2)
+                    (>= y1 (- y2 7))
+                )
+                (same-y new-coord coord-end)
+             ))
+    ]
+  )
+)
+
 ;
 ; SOLVERS
 ;
@@ -140,7 +205,7 @@
     (define sol-same
       (synthesize
               #:forall (list symbol-coord-start symbol-coord-end)
-              #:guarantee (checker-same-bi sketch symbol-coord-start symbol-coord-end)))
+              #:guarantee (checker-same-line sketch symbol-coord-start symbol-coord-end)))
                         
     (printf "\n\n=================\n")
     (if (sat? sol-same) 
@@ -151,8 +216,28 @@
                 (printf "no solution found\n")))
 )
 
-(do-synthesis-bi sk-meet)
+(do-synthesis-bi sk-sameline)
 
+
+;sk-sameline
+
+#|solution:
+/Users/serene/Projects/pippisynth/synthesis-protype/looping-synthesis.rkt:134:0
+'(define (sk-sameline coord-start coord-end)
+   (define coord-curr coord-start)
+   (for-loop
+    7
+    (lambda () (same-y coord-curr coord-end))
+    (lambda () (set! coord-curr coord-curr)))
+   (for-loop
+    7
+    (lambda () (same-y coord-curr coord-end))
+    (lambda () (set! coord-curr (moveDown coord-curr))))
+   coord-curr)
+|#
+
+
+;sk-bi
 #|
 SOLUTION:
 
