@@ -42,54 +42,26 @@
 
 (define (same-x coord1 coord2)
   (destruct (append coord1 coord2)
-    [(list x1 y1 x2 y2)
-      (= x1 x2)]))
+    [(list x y x2 y2)
+      (= x x2)]))
 
 (define (same-y coord1 coord2)
   (destruct (append coord1 coord2)
     [(list x1 y1 x2 y2)
       (= y1 y2)]))
 
-; (coord2) ... (coord1)
-(define (is-to-right coord1 coord2)
+
+
+(define (notsame-y coord1 coord2)
   (destruct (append coord1 coord2)
     [(list x1 y1 x2 y2)
-        (> x1 x2)
-    ]
-  )
-)
+      (not = y1 y2)]))
 
-; (coord1) ... (coord2)
-(define (is-to-left coord1 coord2)
+
+(define (notsame-x coord1 coord2)
   (destruct (append coord1 coord2)
     [(list x1 y1 x2 y2)
-      (< x1 x2)
-    ]
-  )
-)
-
-; (coord2) 
-; ...
-; (coord1)
-(define (is-below coord1 coord2)
-  (destruct (append coord1 coord2)
-    [(list x1 y1 x2 y2)
-      (> y1 y2)
-    ]
-  )
-)
-
-; (coord1) 
-; ...
-; (coord2)
-(define (is-above coord1 coord2)
-  (destruct (append coord1 coord2)
-    [(list x1 y1 x2 y2)
-      (< y1 y2)
-    ]
-  )
-)
-
+      (not = x1 x2)]))
 
 ;
 ; Conditional grammar
@@ -109,6 +81,40 @@
     ]
 )
 
+
+
+(define-grammar (bi-conditional2 coord1 coord2)
+    [expr
+        (choose (same-y coord1 coord2)
+                (notsame-x coord1 coord2)
+        )
+    ]
+)
+
+;
+; Various board position predicates 
+;
+
+(define top-row 0)
+(define bottom-row 250)
+(define left-col 0)
+(define right-col 250)
+
+; (new!!) different than `is-out-of-bounds`
+;   difference here is that we're checking if it is AT the bounds
+;   instead of already outside the bounds
+;   I (darya) find this to be a better checker 
+;   (we want to stop AT bounds, not once we're already outside them)
+;   THIS ISN'T USED BUT I WANTED TO INCLUDE FOR FURTHER EXPLORATION
+; much appreciated (st3f)
+(define (is-at-bounds coord)
+  (destruct coord
+    [(list x y) (or 
+        (= y top-row)
+        (= y bottom-row)
+        (= x left-col)
+        (= x right-col)
+    )]))
     
 ;
 ; SKETCHES
@@ -127,59 +133,21 @@
   coord-curr
 )
 
-#|
-solution:
+    
+;
+; SKETCHES 2 try to get the points on the same line 
+;
 
-(define (sk-meet-1-quad-sol range coord-start coord-end)
-   (define coord-curr coord-start)
-   (for-loop (* 2 range)
-    (lambda () (same-x coord-curr coord-end))
-    (lambda () (set! coord-curr (moveRight coord-curr))))
-   (for-loop (* 2 range)
-    (lambda () (same-y coord-curr coord-end))
-    (lambda () (set! coord-curr (moveDown coord-curr))))
-   coord-curr)
-
-|#
-
-; sketch for moving from `coord-start` to `coord-end`
-;    works for all 4 quadrants
-(define (sk-meet-4-quads range coord-start coord-end)
+(define (sk-sameline coord-start coord-end)
   (define coord-curr coord-start)
-  (for-loop (* 2 range)
-    (lambda () (coord-equals coord-curr coord-end))
-    (lambda () (cond
-        [(bi-conditional coord-curr coord-end #:depth 1)
-            (set! coord-curr (moving coord-curr #:depth 1))]
-        [(bi-conditional coord-curr coord-end #:depth 1)
-            (set! coord-curr (moving coord-curr #:depth 1))]
-        [(bi-conditional coord-curr coord-end #:depth 1)
-            (set! coord-curr (moving coord-curr #:depth 1))]
-        [(bi-conditional coord-curr coord-end #:depth 1)
-            (set! coord-curr (moving coord-curr #:depth 1))])))
+  (for-loop 7
+    (lambda () (bi-conditional2 coord-curr coord-end #:depth 1))
+    (lambda () (set! coord-curr (moving coord-curr #:depth 1))))
+  (for-loop 7
+    (lambda () (bi-conditional2 coord-curr coord-end #:depth 1))
+    (lambda () (set! coord-curr (moving coord-curr #:depth 1))))
   coord-curr
 )
-
-#|
-solution:
-
-(define (sk-meet-4-quads-sol range coord-start coord-end)
-   (define coord-curr coord-start)
-   (for-loop (* 2 range)
-    (lambda () (coord-equals coord-curr coord-end))
-    (lambda ()
-      (cond
-       [(is-above coord-curr coord-end)
-          (set! coord-curr (moveDown coord-curr))]
-       [(is-below coord-curr coord-end) 
-          (set! coord-curr (moveUp coord-curr))]
-       [(is-to-left coord-curr coord-end)
-          (set! coord-curr (moveRight coord-curr))]
-       [(is-to-right coord-curr coord-end)
-          (set! coord-curr (moveLeft coord-curr))])))
-   coord-curr)
-
-|#
 
 
 
@@ -244,6 +212,28 @@ solution:
 )
 
 
+(define (checker-same-line impl coord-start coord-end)
+  (destruct (append coord-start coord-end)
+    [(list x1 y1 x2 y2)
+
+     (define new-coord (impl coord-start coord-end))
+
+     (assert (implies 
+                (and
+                    ; this is saying that (x2-7) <= x1 <= x2
+                    (<= x1 x2)
+                    (>= x1 (- x2 7))
+
+                    ; this is saying that (y2-7) <= y1 <= y2
+                    (<= y1 y2)
+                    (>= y1 (- y2 7))
+                )
+                (same-y new-coord coord-end)
+             ))
+    ]
+  )
+)
+
 ;
 ; SOLVERS
 ;
@@ -257,11 +247,9 @@ solution:
     (define sol-same
       (synthesize
               #:forall (list symbol-coord-start symbol-coord-end)
-              #:guarantee (checker range sketch symbol-coord-start symbol-coord-end)))
-    
-    (define after (current-inexact-milliseconds))
-    (define time (- after before))
-
+              #:guarantee (checker-same-line sketch symbol-coord-start symbol-coord-end)))
+                        
+    (printf "\n\n=================\n")
     (if (sat? sol-same) 
             (begin 
                 (printf "solution:\n")
@@ -270,10 +258,42 @@ solution:
                 (printf "no solution found\n")))
 ) 
 
+(do-synthesis-bi sk-sameline)
 
-;
-; RUNNING SYNTHESIS
-;
+
+;sk-sameline
+
+#|solution:
+/Users/serene/Projects/pippisynth/synthesis-protype/looping-synthesis.rkt:134:0
+'(define (sk-sameline coord-start coord-end)
+   (define coord-curr coord-start)
+   (for-loop
+    7
+    (lambda () (same-y coord-curr coord-end))
+    (lambda () (set! coord-curr coord-curr)))
+   (for-loop
+    7
+    (lambda () (same-y coord-curr coord-end))
+    (lambda () (set! coord-curr (moveDown coord-curr))))
+   coord-curr)
+|#
+
+
+;sk-bi
+#|
+SOLUTION:
+
+(define (sk-meet coord-start coord-end)
+   (define coord-curr coord-start)
+   (for-loop
+    7
+    (lambda () (same-x coord-curr coord-end))
+    (lambda () (set! coord-curr (moveRight coord-curr))))
+   (for-loop
+    7
+    (lambda () (same-y coord-curr coord-end))
+    (lambda () (set! coord-curr (moveDown coord-curr))))
+   coord-curr)
 
 (define range 7)
 (do-synthesis-bi range checker-1-quad sk-meet-1-quad)
