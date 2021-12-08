@@ -6,7 +6,7 @@
 )
 
 
-provide 
+(provide 
   check-same
   check-one
   checker-test
