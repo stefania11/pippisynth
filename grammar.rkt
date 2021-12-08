@@ -13,6 +13,7 @@
 
 
 ; DEFINITIONS
+
 (define (moveLeft coord)
   (match coord
     [(list x y) (list (- x 1) y)]
@@ -33,7 +34,6 @@
     [(list x y) (list x (+ y 1))]
     [_ "error wrong format for coordinate"]))
 
-; GRAMMAR
 (define-grammar (moving coord)
   [expr
    (choose coord
