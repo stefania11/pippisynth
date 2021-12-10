@@ -16,6 +16,8 @@
 ;
 ; meeting 4 quads
 ;
+
+; SKETCH
 (define (meeting-four-quads coord-start coord-end)
 
   (define coord-curr coord-start)
@@ -41,6 +43,14 @@
   coord-curr)
 
 
+
+
+
+
+
+
+
+; CHECKER
 (define (checker-four-quads impl coord-start coord-end)
   (destruct (append coord-start coord-end)
     [(list x1 y1 x2 y2)
