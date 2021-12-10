@@ -75,4 +75,8 @@
 
                 (coord-equals new-coord coord-end) ) ) ] ) )
                 
+
+
+
+                
 (do-synthesis-bi checker-four-quads meeting-four-quads)
