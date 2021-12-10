@@ -12,6 +12,8 @@
   "synthesis.rkt"
 )
 
+(provide move-diagonally-loop check-diagonal-loop)
+
 ;
 ; move diagonally loop
 ;
@@ -26,10 +28,6 @@
     (lambda () (set! coord (moving coord #:depth 1))))
 
    coord)
-
-
-
-
 
 (define (check-diagonal-loop impl coord)
   (match coord

@@ -12,7 +12,7 @@
   "synthesis.rkt"
 )
 
-
+(provide move-diagonally check-diagonal)
 
 ;
 ; move diagonally
@@ -25,9 +25,6 @@
   (define coord5 (moving coord4  #:depth 1))
   (define coord6 (moving coord5  #:depth 1))
    coord6)
-
-
-
 
 (define (check-diagonal impl coord)
   (match coord

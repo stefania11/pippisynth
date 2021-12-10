@@ -12,13 +12,13 @@
   "synthesis.rkt"
 )
 
+(provide move-left check-left)
 
 ;
 ; move once
 ;
 (define (move-left coord) 
     (moving coord #:depth 1))
-
 
 (define (check-left impl coord)
   (match coord

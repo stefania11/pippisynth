@@ -12,6 +12,7 @@
   "synthesis.rkt"
 )
 
+(provide meeting-four-quads checker-four-quads)
 
 ;
 ; meeting 4 quads
@@ -42,14 +43,6 @@
 
   coord-curr)
 
-
-
-
-
-
-
-
-
 ; CHECKER
 (define (checker-four-quads impl coord-start coord-end)
   (destruct (append coord-start coord-end)
@@ -74,9 +67,5 @@
                 )
 
                 (coord-equals new-coord coord-end) ) ) ] ) )
-                
 
-
-
-                
 (do-synthesis-bi checker-four-quads meeting-four-quads)

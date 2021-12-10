@@ -12,6 +12,8 @@
   "synthesis.rkt"
 )
 
+(provide meeting-one-quad checker-one-quad)
+
 ;
 ; meeting one quad
 ;
@@ -28,7 +30,6 @@
     (lambda () (set! coord-curr (moving coord-curr #:depth 1))))
 
    coord-curr)
-
 
 (define (checker-one-quad impl coord-start coord-end)
   (destruct (append coord-start coord-end)
