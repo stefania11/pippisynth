@@ -4,7 +4,7 @@ There are 5 examples that we set up that are able to be run. They are each in th
 
 ## System Requirements
 
-In order to run these examples, you need to have Racket and Rosette installed. Other than that, everything should be self contained in the files in this repo. 
+In order to run these examples, you need to have [Racket](https://download.racket-lang.org/) and [Rosette](https://github.com/emina/rosette) installed. Other than that, everything should be self contained in the files in this repo. 
 
 ## File Organization
 
