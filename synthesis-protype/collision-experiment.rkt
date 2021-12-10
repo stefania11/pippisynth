@@ -157,15 +157,15 @@
     ]
 )
 
-(define-grammar (neigbor-grammar coord-curr coord-collision)
+(define-grammar (neigbor-grammar coord1 coord2)
   [expr
         (choose 
-                (is-right-neighbor-of coord-curr coord-collision)
-                (is-below-neighbor-of coord-curr coord-collision)
+                (is-right-neighbor-of coord1 coord2)
+                (is-below-neighbor-of coord1 coord2)
                 ; (not (is-right-neighbor-of coord1 coord2))
                 ; (not (is-below-neighbor-of coord1 coord2))
-                ; (is-left-neighbor-of coord1 coord2)
-                ; (is-above-neighbor-of coord1 coord2)
+                (is-left-neighbor-of coord1 coord2)
+                (is-above-neighbor-of coord1 coord2)
         )
     ]
 )
@@ -255,47 +255,107 @@
   coord-curr
 )
 
-
-(define (sketch-collision range coord-start coord-end coord-collision)
+(define (sketch-collision-4-quads range coord-start coord-end coord-collision)
   (define coord-curr coord-start)
   (for-loop (* 2 range)
     (lambda () (coord-equals coord-curr coord-end))
-    (lambda () ;(begin 
-      (cond
-        [(&& (is-below coord-curr coord-end)) ;(not (is-below-neighbor-of coord-curr coord-collision)))
-            (set! coord-curr (moving coord-curr #:depth 1))]
-        [(&& (is-above coord-curr coord-end)) ;(not (is-above-neighbor-of coord-curr coord-collision)))
-            (set! coord-curr (moving coord-curr #:depth 1))]
-        [(&& (is-to-right coord-curr coord-end)) ;(not (is-right-neighbor-of coord-curr coord-collision)))
-            (set! coord-curr (moving coord-curr #:depth 1))]
-        [(&& (is-to-left coord-curr coord-end)) ;(not (is-left-neighbor-of coord-curr coord-collision)))
-            (set! coord-curr (moving coord-curr #:depth 1))
-        ])
-      ; (assert (not (coord-equals coord-curr coord-collision)))
-      ;)
+    (lambda () (begin 
+                (cond
+                    [(tri-conditional coord-curr coord-end coord-collision #:depth 1)
+                        (begin 
+                          (set! coord-curr (moveLeft coord-curr))
+                        )]
+
+                    [(tri-conditional coord-curr coord-end coord-collision #:depth 1)
+                        (begin 
+                          (set! coord-curr (moveUp coord-curr))
+                        )]
+
+                    [(tri-conditional coord-curr coord-end coord-collision #:depth 1)
+                        (begin 
+                          (set! coord-curr (moveRight coord-curr))
+                        )]
+
+                    [(tri-conditional coord-curr coord-end coord-collision #:depth 1)
+                        (begin 
+                          (set! coord-curr (moveDown coord-curr))
+                        )]
+
+                    ; stuck trying to go left
+                    [(tri-conditional coord-curr coord-end coord-collision #:depth 1)
+                        (begin 
+                            (set! coord-curr (moveUp coord-curr))
+                            (set! coord-curr (moveLeft coord-curr))
+                        )]
+
+                    ; stuck trying to go up
+                    [(tri-conditional coord-curr coord-end coord-collision #:depth 1)
+                        (begin 
+                            (set! coord-curr (moveRight coord-curr))
+                            (set! coord-curr (moveUp coord-curr))
+                        )]
+                    
+                    ; stuck trying to go right
+                    [(tri-conditional coord-curr coord-end coord-collision #:depth 1)
+                        (begin 
+                            (set! coord-curr (moveUp coord-curr))
+                            (set! coord-curr (moveRight coord-curr))
+                        )]
+
+                    ; stuck trying to go down
+                    [(tri-conditional coord-curr coord-end coord-collision #:depth 1)
+                        (begin 
+                            (set! coord-curr (moveRight coord-curr))
+                            (set! coord-curr (moveDown coord-curr))
+                        )]
+                  ) 
+                  (assert (not (coord-equals coord-curr coord-collision)))
+                )
     )
   )
   coord-curr
 )
 
-(define (sketch-collision-final range coord-start coord-end coord-collision)
-  (define coord-curr coord-start)
-  (for-loop (* 2 range)
-    (lambda () (coord-equals coord-curr coord-end))
-    (lambda () (begin 
-      (cond
-        [(tri-conditional coord-curr coord-end coord-collision #:depth 1)
-            (set! coord-curr (moving coord-curr #:depth 1))]
-        [(tri-conditional coord-curr coord-end coord-collision #:depth 1)
-            (set! coord-curr (moving coord-curr #:depth 1))]
-        [(tri-conditional coord-curr coord-end coord-collision #:depth 1)
-            (set! coord-curr (moving coord-curr #:depth 1))]
-        [(tri-conditional coord-curr coord-end coord-collision #:depth 1)
-            (set! coord-curr (moving coord-curr #:depth 1))
-        ])
-      (assert (not (coord-equals coord-curr coord-collision))))))
-  coord-curr
-)
+; (define (sketch-collision range coord-start coord-end coord-collision)
+;   (define coord-curr coord-start)
+;   (for-loop (* 2 range)
+;     (lambda () (coord-equals coord-curr coord-end))
+;     (lambda () ;(begin 
+;       (cond
+;         [(&& (is-below coord-curr coord-end)) ;(not (is-below-neighbor-of coord-curr coord-collision)))
+;             (set! coord-curr (moving coord-curr #:depth 1))]
+;         [(&& (is-above coord-curr coord-end)) ;(not (is-above-neighbor-of coord-curr coord-collision)))
+;             (set! coord-curr (moving coord-curr #:depth 1))]
+;         [(&& (is-to-right coord-curr coord-end)) ;(not (is-right-neighbor-of coord-curr coord-collision)))
+;             (set! coord-curr (moving coord-curr #:depth 1))]
+;         [(&& (is-to-left coord-curr coord-end)) ;(not (is-left-neighbor-of coord-curr coord-collision)))
+;             (set! coord-curr (moving coord-curr #:depth 1))
+;         ])
+;       ; (assert (not (coord-equals coord-curr coord-collision)))
+;       ;)
+;     )
+;   )
+;   coord-curr
+; )
+
+; (define (sketch-collision-final range coord-start coord-end coord-collision)
+;   (define coord-curr coord-start)
+;   (for-loop (* 2 range)
+;     (lambda () (coord-equals coord-curr coord-end))
+;     (lambda () (begin 
+;       (cond
+;         [(tri-conditional coord-curr coord-end coord-collision #:depth 1)
+;             (set! coord-curr (moving coord-curr #:depth 1))]
+;         [(tri-conditional coord-curr coord-end coord-collision #:depth 1)
+;             (set! coord-curr (moving coord-curr #:depth 1))]
+;         [(tri-conditional coord-curr coord-end coord-collision #:depth 1)
+;             (set! coord-curr (moving coord-curr #:depth 1))]
+;         [(tri-conditional coord-curr coord-end coord-collision #:depth 1)
+;             (set! coord-curr (moving coord-curr #:depth 1))
+;         ])
+;       (assert (not (coord-equals coord-curr coord-collision))))))
+;   coord-curr
+; )
 
 ;
 ; CHECKERS
@@ -347,37 +407,60 @@
   )
 )
 
-(define (checker-collision range impl coord-start coord-end coord-collision)
+(define (checker-collision-4-quads range impl coord-start coord-end coord-collision)
   (destruct (append coord-start coord-end)
     [(list x1 y1 x2 y2)
 
-     (define new-coord (impl range coord-start coord-end coord-collision))
+        ; (define new-coord (impl range coord-start coord-end coord-collision))
+        ; ; this is saying that (x2 + 2) <= x1 <= (x2+range)
+        ; (assume (> x1 (+ x2 2)))
+        ; (assume (<= x1 (+ x2 range)))
 
-     (assert (implies 
-                (and
-                    ; TODO this gives enough to be able to achieve goal
-                    (is-in-bounds coord-start)
-                    (is-in-bounds coord-end)
-                    (is-in-bounds coord-collision)
-                    (and 
-                      (not (same-x coord-start coord-end))
-                      (not (same-y coord-start coord-end)))
-                    ; this is saying that (x2-7) <= x1 <= (x2+7)
-                    (<= x1 (+ x2 range))
-                    (>= x1 (- x2 range))
+        ; ; this is saying that (y2 + 2) <= y1 <= (y2+range)
+        ; (assume (> y1 (+ y2 2)))
+        ; (assume (<= y1 (+ y2 range)))
 
-                    ; this is saying that (y2-7) <= y1 <= (y2+7)
-                    (<= y1 (+ y2 range))
-                    (>= y1 (- y2 range))
+        ; this is saying that (x2-range) <= x1 <= (x2+range)
+        (assume (<= x1 (+ x2 range)))
+        (assume (>= x1 (- x2 range)))
 
-                    ; TODO coord-collision needs to be in board
+        ; this is saying that (y2-range) <= y1 <= (y2+range)
+        (assume (<= y1 (+ y2 range)))
+        (assume (>= y1 (- y2 range)))
+
+        ; collision must be different than start and end
+        (assume (not (coord-equals coord-start coord-collision)))
+        (assume (not (coord-equals coord-end coord-collision)))
+
+        ; (printf "oofers here\n")
+        (define new-coord (impl range coord-start coord-end coord-collision))
+
+        (assert (coord-equals new-coord coord-end))
+    ;  (assert (implies 
+    ;             (and
+    ;                 ; TODO this gives enough to be able to achieve goal
+    ;                 ; (is-in-bounds coord-start)
+    ;                 ; (is-in-bounds coord-end)
+    ;                 ; (is-in-bounds coord-collision)
+    ;                 (and 
+    ;                   (not (same-x coord-start coord-end))
+    ;                   (not (same-y coord-start coord-end)))
+    ;                 ; this is saying that (x2-7) <= x1 <= (x2+7)
+    ;                 (<= x1 (+ x2 range))
+    ;                 (>= x1 (- x2 range))
+
+    ;                 ; this is saying that (y2-7) <= y1 <= (y2+7)
+    ;                 (<= y1 (+ y2 range))
+    ;                 (>= y1 (- y2 range))
+
+    ;                 ; TODO coord-collision needs to be in board
                     
-                    ;collision  must be different than start and end
-                    (not (coord-equals coord-start coord-collision))
-                    (not (coord-equals coord-end coord-collision))
-                )
-                (coord-equals new-coord coord-end)
-             ))
+    ;                 ;collision  must be different than start and end
+    ;                 (not (coord-equals coord-start coord-collision))
+    ;                 (not (coord-equals coord-end coord-collision))
+    ;             )
+    ;             (coord-equals new-coord coord-end)
+    ;          ))
     ]
   )
 )
@@ -397,58 +480,58 @@
 ; SOLVERS
 ;
 
-(define (do-synthesis-bi checker sketch)
+; (define (do-synthesis-bi checker sketch)
 
-    (define symbol-coord-start (fresh-sym-coord))
-    (define symbol-coord-end   (fresh-sym-coord))
+;     (define symbol-coord-start (fresh-sym-coord))
+;     (define symbol-coord-end   (fresh-sym-coord))
 
-    (define before (current-inexact-milliseconds))
-    (define sol-same
-      (synthesize
-              #:forall (list symbol-coord-start symbol-coord-end)
-              #:guarantee (checker sketch symbol-coord-start symbol-coord-end)))
+;     (define before (current-inexact-milliseconds))
+;     (define sol-same
+;       (synthesize
+;               #:forall (list symbol-coord-start symbol-coord-end)
+;               #:guarantee (checker sketch symbol-coord-start symbol-coord-end)))
     
-    (define after (current-inexact-milliseconds))
-    (define time (- after before))
+;     (define after (current-inexact-milliseconds))
+;     (define time (- after before))
 
-    ; (printf "\n\n=================\n")
-    (if (sat? sol-same) 
-            (begin 
-                (printf "solution:\n")
-                (print-forms sol-same))
-            (begin
-                (printf "no solution found\n")))
+;     ; (printf "\n\n=================\n")
+;     (if (sat? sol-same) 
+;             (begin 
+;                 (printf "solution:\n")
+;                 (print-forms sol-same))
+;             (begin
+;                 (printf "no solution found\n")))
     
-    ; (printf "\n***** time: ~s milliseconds\n" time)
-    time
-)   
+;     ; (printf "\n***** time: ~s milliseconds\n" time)
+;     time
+; )   
 
-(define (do-synthesis-tri checker sketch)
+; (define (do-synthesis-tri checker sketch)
 
-    (define symbol-coord-start (fresh-sym-coord))
-    (define symbol-coord-end   (fresh-sym-coord))
-    (define symbol-coord-collision   (fresh-sym-coord))
+;     (define symbol-coord-start (fresh-sym-coord))
+;     (define symbol-coord-end   (fresh-sym-coord))
+;     (define symbol-coord-collision   (fresh-sym-coord))
 
-    ; (define before (current-inexact-milliseconds))
-    (define sol-same
-      (synthesize
-              #:forall (list symbol-coord-start symbol-coord-end symbol-coord-collision)
-              #:guarantee (checker 4 sketch symbol-coord-start symbol-coord-end symbol-coord-collision)))
+;     ; (define before (current-inexact-milliseconds))
+;     (define sol-same
+;       (synthesize
+;               #:forall (list symbol-coord-start symbol-coord-end symbol-coord-collision)
+;               #:guarantee (checker 4 sketch symbol-coord-start symbol-coord-end symbol-coord-collision)))
     
-    ; (define after (current-inexact-milliseconds))
-    ; (define time (- after before))
+;     ; (define after (current-inexact-milliseconds))
+;     ; (define time (- after before))
 
-    ; (printf "\n\n=================\n")
-    (if (sat? sol-same) 
-            (begin 
-                (printf "solution:\n")
-                (print-forms sol-same))
-            (begin
-                (printf "no solution found\n")))
+;     ; (printf "\n\n=================\n")
+;     (if (sat? sol-same) 
+;             (begin 
+;                 (printf "solution:\n")
+;                 (print-forms sol-same))
+;             (begin
+;                 (printf "no solution found\n")))
     
-    ; (printf "\n***** time: ~s milliseconds\n" time)
-    ; time
-) 
+;     ; (printf "\n***** time: ~s milliseconds\n" time)
+;     ; time
+; ) 
 
 ; (do-synthesis-tri checker-collision sketch-collision)
 
@@ -456,38 +539,100 @@
 ; try with just one quad example
 ; dont worry about borders yet 
 
-(define (sketch-collision-sol range coord-start coord-end coord-collision)
+(define (sketch-collision-4-quads-my-sol range coord-start coord-end coord-collision)
   (define coord-curr coord-start)
   (for-loop (* 2 range)
     (lambda () (coord-equals coord-curr coord-end))
     (lambda () (begin 
-      (cond
-        [(&& (is-below coord-curr coord-end) (not (is-below-neighbor-of coord-curr coord-collision)))
-            (begin 
-              (set! coord-curr (moveUp coord-curr))
-              (printf "moveUp - coord-curr: ~s\n" coord-curr))]
-        
-        [(&& (is-above coord-curr coord-end) (not (is-above-neighbor-of coord-curr coord-collision)))
-            (begin 
-              (set! coord-curr (moveDown coord-curr))
-              (printf "moveDown - coord-curr: ~s\n" coord-curr))]
-        
-        [(&& (is-to-right coord-curr coord-end) (not (is-right-neighbor-of coord-curr coord-collision)))
-            (begin 
-              (set! coord-curr (moveLeft coord-curr))
-              (printf "moveLeft - coord-curr: ~s\n" coord-curr))]
-        
-        [(&& (is-to-left coord-curr coord-end) (not (is-left-neighbor-of coord-curr coord-collision)))
-            (begin 
-              (set! coord-curr (moveRight coord-curr))
-              (printf "moveRight - coord-curr: ~s\n" coord-curr))
-        ])
-      (assert (not (coord-equals coord-curr coord-collision)))
-              )
+                (cond
+                    [(&& (is-to-right coord-curr coord-end) (not (is-right-neighbor-of coord-curr coord-collision)))
+                        (begin 
+                          (set! coord-curr (moveLeft coord-curr))
+                        )]
+
+                    [(&& (is-below coord-curr coord-end) (not (is-below-neighbor-of coord-curr coord-collision)))
+                        (begin 
+                          (set! coord-curr (moveUp coord-curr))
+                        )]
+
+                    [(&& (is-above coord-curr coord-end) (not (is-above-neighbor-of coord-curr coord-collision)))
+                        (begin 
+                          (set! coord-curr (moveDown coord-curr))
+                        )]
+
+                    [(&& (is-to-left coord-curr coord-end) (not (is-left-neighbor-of coord-curr coord-collision)))
+                        (begin 
+                          (set! coord-curr (moveRight coord-curr))
+                        )]
+
+                    ; stuck trying to go left
+                    [(&& (is-below coord-curr coord-end) (not (is-below-neighbor-of coord-curr coord-collision)))
+                        (begin 
+                            (set! coord-curr (moveUp coord-curr))
+                            (set! coord-curr (moveLeft coord-curr))
+                        )]
+
+                    ; stuck trying to go up
+                    [(&& (is-below coord-curr coord-end) (not (is-right-neighbor-of coord-curr coord-collision)))
+                        (begin 
+                            (set! coord-curr (moveRight coord-curr))
+                            (set! coord-curr (moveUp coord-curr))
+                        )]
+                    
+                    ; stuck trying to go right
+                    [(tri-conditional coord-curr coord-end coord-collision #:depth 1)
+                        (begin 
+                            (set! coord-curr (moveUp coord-curr))
+                            (set! coord-curr (moveRight coord-curr))
+                        )]
+
+                    ; stuck trying to go down
+                    [(tri-conditional coord-curr coord-end coord-collision #:depth 1)
+                        (begin 
+                            (set! coord-curr (moveRight coord-curr))
+                            (set! coord-curr (moveDown coord-curr))
+                        )]
+                  ) 
+                  (assert (not (coord-equals coord-curr coord-collision)))
+                )
     )
   )
   coord-curr
 )
+
+
+; (define (sketch-collision-sol range coord-start coord-end coord-collision)
+;   (define coord-curr coord-start)
+;   (for-loop (* 2 range)
+;     (lambda () (coord-equals coord-curr coord-end))
+;     (lambda () (begin 
+;       (cond
+;         [(&& (is-below coord-curr coord-end) (not (is-below-neighbor-of coord-curr coord-collision)))
+;             (begin 
+;               (set! coord-curr (moveUp coord-curr))
+;               (printf "moveUp - coord-curr: ~s\n" coord-curr))]
+        
+;         [(&& (is-above coord-curr coord-end) (not (is-above-neighbor-of coord-curr coord-collision)))
+;             (begin 
+;               (set! coord-curr (moveDown coord-curr))
+;               (printf "moveDown - coord-curr: ~s\n" coord-curr))]
+        
+;         [(&& (is-to-right coord-curr coord-end) (not (is-right-neighbor-of coord-curr coord-collision)))
+;             (begin 
+;               (set! coord-curr (moveLeft coord-curr))
+;               (printf "moveLeft - coord-curr: ~s\n" coord-curr))]
+        
+;         [(&& (is-to-left coord-curr coord-end) (not (is-left-neighbor-of coord-curr coord-collision)))
+;             (begin 
+;               (set! coord-curr (moveRight coord-curr))
+;               (printf "moveRight - coord-curr: ~s\n" coord-curr))
+;         ])
+;       (assert (not (coord-equals coord-curr coord-collision)))
+;               )
+;     )
+;   )
+;   coord-curr
+; )
 
 (define (sketch-collision-one-quad range coord-start coord-end coord-collision)
   (define coord-curr coord-start)
@@ -496,27 +641,28 @@
     (lambda () (begin 
                   (cond
                     
-                    [(tri-conditional coord-curr coord-end coord-collision #:depth 1)
+                    ; [(tri-conditional coord-curr coord-end coord-collision #:depth 1)
+                    [(&& (bi-conditional coord-start coord-end) (not (neigbor-grammar coord-start coord-collision)))
                         (begin 
-                          (set! coord-curr (moving coord-curr #:depth 1))
-                        )]
-                    [(tri-conditional coord-curr coord-end coord-collision #:depth 1)
-                        (begin 
-                          (set! coord-curr (moving coord-curr #:depth 1))
+                          (set! coord-curr (moveLeft coord-curr))
                         )]
 
-                    [(tri-conditional coord-curr coord-end coord-collision #:depth 1)
+                    ; [(tri-conditional coord-curr coord-end coord-collision #:depth 1)
+                    [(&& (bi-conditional coord-start coord-end) (not (neigbor-grammar coord-start coord-collision)))
                         (begin 
-                            ; (set! coord-curr (moving coord-curr #:depth 1))
-                            ; (set! coord-curr (moving coord-curr #:depth 1))
+                          (set! coord-curr (moveUp coord-curr))
+                        )]
+
+                    ; [(tri-conditional coord-curr coord-end coord-collision #:depth 1)
+                    [(&& (bi-conditional coord-start coord-end) (neigbor-grammar coord-start coord-collision))
+                        (begin 
                             (set! coord-curr (moveUp coord-curr))
                             (set! coord-curr (moveLeft coord-curr))
                         )]
 
-                    [(tri-conditional coord-curr coord-end coord-collision #:depth 1)
+                    ; [(tri-conditional coord-curr coord-end coord-collision #:depth 1)
+                    [(&& (bi-conditional coord-start coord-end) (neigbor-grammar coord-start coord-collision))
                         (begin 
-                            ; (set! coord-curr (moving coord-curr #:depth 1))
-                            ; (set! coord-curr (moving coord-curr #:depth 1))
                             (set! coord-curr (moveRight coord-curr))
                             (set! coord-curr (moveUp coord-curr))
                         )]
@@ -545,26 +691,9 @@
       (assume (not (coord-equals coord-start coord-collision)))
       (assume (not (coord-equals coord-end coord-collision)))
               
-      ; (printf "oofers here\n")
       (define new-coord (impl range coord-start coord-end coord-collision))
       
       (assert (coord-equals new-coord coord-end))
-      ; (assert (implies 
-      ;             (and
-      ;                 ; this is saying that (x2 + 2) <= x1 <= (x2+range)
-      ;                 (> x1 (+ x2 2))
-      ;                 (<= x1 (+ x2 range))
-
-      ;                 ; this is saying that (y2 + 2) <= y1 <= (y2+range)
-      ;                 (> y1 (+ y2 2))
-      ;                 (<= y1 (+ y2 range))
-                      
-      ;                 ; collision must be different than start and end
-      ;                 (not (coord-equals coord-start coord-collision))
-      ;                 (not (coord-equals coord-end coord-collision))
-      ;             )
-      ;             (coord-equals new-coord coord-end)
-      ;         ))
     ]
   )
 )
@@ -573,13 +702,13 @@
 
 ; (checker-collision 4 sketch-collision-sol (list 5 5) (list 7 7) (list 1000 10000))
 
-(define (verify-tri)
+(define (verify-tri checker sketch)
 
     (define symbol-coord-start (fresh-sym-coord))
     (define symbol-coord-end   (fresh-sym-coord))
     (define symbol-coord-collision   (fresh-sym-coord))
 
-    (define sol (verify (checker-collision-one-quad sketch-collision-one-quad symbol-coord-start symbol-coord-end symbol-coord-collision)))
+    (define sol (verify (checker sketch symbol-coord-start symbol-coord-end symbol-coord-collision)))
     ; (define sol (verify (checker-collision 4 sketch-collision-sol symbol-coord-start symbol-coord-end symbol-coord-collision)))
 
     (if (sat? sol) 
@@ -589,10 +718,11 @@
             (begin
                 (printf "verified \n")))
 ) 
-; (verify-tri)
+; (verify-tri checker-collision-one-quad sketch-collision-one-quad)
+; (verify-tri checker-collision-4-quads sketch-collision-4-quads-my-sol)
 
 
-(define (do-synthesis-tri-one-quad)
+(define (do-synthesis-tri-collision checker sketch)
 
     ; (define coord-start (list 7 7))
     ; (define coord-end   (list 5 4))
@@ -605,7 +735,7 @@
     (define sol-same
       (synthesize
               #:forall (list symbol-coord-start symbol-coord-end symbol-coord-collision)
-              #:guarantee (checker-collision-one-quad 4 sketch-collision-one-quad symbol-coord-start symbol-coord-end symbol-coord-collision)))
+              #:guarantee (checker 4 sketch symbol-coord-start symbol-coord-end symbol-coord-collision)))
     
     ; (define after (current-inexact-milliseconds))
     ; (define time (- after before))
@@ -623,124 +753,125 @@
 ) 
 
 
-(do-synthesis-tri-one-quad)
-; (moveRight (assert #f))
+(do-synthesis-tri-collision checker-collision-one-quad sketch-collision-one-quad)
+; (do-synthesis-tri-collision checker-collision-4-quads sketch-collision-4-quads)
+
 
 (define coord-start (list 7 7))
 (define coord-end   (list 5 4))
 (define coord-collision   (list 5 6))
 
-(define (sketch-collision-one-quad-sol range coord-start coord-end coord-collision)
-  (define coord-curr coord-start)
-  (for-loop (+ (* 2 range) 2)
-    (lambda () (coord-equals coord-curr coord-end))
-    (lambda () (begin 
-                  (cond
+; (define (sketch-collision-one-quad-sol range coord-start coord-end coord-collision)
+;   (define coord-curr coord-start)
+;   (for-loop (+ (* 2 range) 2)
+;     (lambda () (coord-equals coord-curr coord-end))
+;     (lambda () (begin 
+;                   (cond
                     
-                    [(&& (is-to-right coord-curr coord-end)
-                         (not (is-right-neighbor-of coord-curr coord-collision)))
-                        (begin 
-                          (set! coord-curr (moveLeft coord-curr))
-                          ; (printf "moveLeft - ~s, coll: ~s\n" coord-curr coord-collision)
-                        )]
+;                     [(&& (is-to-right coord-curr coord-end)
+;                          (not (is-right-neighbor-of coord-curr coord-collision)))
+;                         (begin 
+;                           (set! coord-curr (moveLeft coord-curr))
+;                           ; (printf "moveLeft - ~s, coll: ~s\n" coord-curr coord-collision)
+;                         )]
                         
-                    [(&& (is-below coord-curr coord-end)
-                        (not (is-below-neighbor-of coord-curr coord-collision)))
-                        (begin 
-                          (set! coord-curr (moveUp coord-curr))
-                          ; (printf "moveUp - ~s, coll: ~s\n" coord-curr coord-collision)
-                        )]
+;                     [(&& (is-below coord-curr coord-end)
+;                         (not (is-below-neighbor-of coord-curr coord-collision)))
+;                         (begin 
+;                           (set! coord-curr (moveUp coord-curr))
+;                           ; (printf "moveUp - ~s, coll: ~s\n" coord-curr coord-collision)
+;                         )]
 
-                    [(&& (is-to-right coord-curr coord-end)
-                         (is-right-neighbor-of coord-curr coord-collision))
-                        (begin 
-                            ; (printf "double-tap 1\n")
-                            (set! coord-curr (moveUp coord-curr))
-                            ; (printf "moveUp - ~s, coll: ~s\n" coord-curr coord-collision)
-                            (set! coord-curr (moveLeft coord-curr))
-                            ; (printf "moveLeft - ~s, coll: ~s\n" coord-curr coord-collision)
-                        )]
+;                     [(&& (is-to-right coord-curr coord-end)
+;                          (is-right-neighbor-of coord-curr coord-collision))
+;                         (begin 
+;                             ; (printf "double-tap 1\n")
+;                             (set! coord-curr (moveUp coord-curr))
+;                             ; (printf "moveUp - ~s, coll: ~s\n" coord-curr coord-collision)
+;                             (set! coord-curr (moveLeft coord-curr))
+;                             ; (printf "moveLeft - ~s, coll: ~s\n" coord-curr coord-collision)
+;                         )]
 
-                    [(&& (is-below coord-curr coord-end)
-                         (is-below-neighbor-of coord-curr coord-collision))
-                        (begin 
-                            ; (printf "double-tap 2\n")
-                            (set! coord-curr (moveRight coord-curr))
-                            ; (printf "moveRight - ~s, coll: ~s\n" coord-curr coord-collision)
-                            (set! coord-curr (moveUp coord-curr))
-                            ; (printf "moveUp - ~s, coll: ~s\n" coord-curr coord-collision)
-                        )]
-                  ) 
-                  (assert (not (coord-equals coord-curr coord-collision)))
-               )
-    )
-  )
-  coord-curr
-)
+;                     [(&& (is-below coord-curr coord-end)
+;                          (is-below-neighbor-of coord-curr coord-collision))
+;                         (begin 
+;                             ; (printf "double-tap 2\n")
+;                             (set! coord-curr (moveRight coord-curr))
+;                             ; (printf "moveRight - ~s, coll: ~s\n" coord-curr coord-collision)
+;                             (set! coord-curr (moveUp coord-curr))
+;                             ; (printf "moveUp - ~s, coll: ~s\n" coord-curr coord-collision)
+;                         )]
+;                   ) 
+;                   (assert (not (coord-equals coord-curr coord-collision)))
+;                )
+;     )
+;   )
+;   coord-curr
+; )
 ; (sketch-collision-one-quad-sol 4 coord-start coord-end coord-collision)
 
 
-(define (sketch-collision-one-quad-sol-2
-          range
-          coord-start
-          coord-end
-          coord-collision)
-   (define coord-curr coord-start)
-   (for-loop (+ (* 2 range) 2)
-    (lambda () (coord-equals coord-curr coord-end))
-    (lambda ()
-      (begin
-        (cond
+; (define (sketch-collision-one-quad-sol-2
+;           range
+;           coord-start
+;           coord-end
+;           coord-collision)
+;    (define coord-curr coord-start)
+;    (for-loop (+ (* 2 range) 2)
+;     (lambda () (coord-equals coord-curr coord-end))
+;     (lambda ()
+;       (begin
+;         (cond
          
-         ((&& (is-to-right coord-curr coord-end) (not (is-right-neighbor-of coord-curr coord-collision)))
-          (begin 
-            (set! coord-curr (moveLeft coord-curr))
-            (printf "moveLeft - ~s, coll: ~s\n" coord-curr coord-collision)
-          ))
+;          ((&& (is-to-right coord-curr coord-end) (not (is-right-neighbor-of coord-curr coord-collision)))
+;           (begin 
+;             (set! coord-curr (moveLeft coord-curr))
+;             (printf "moveLeft - ~s, coll: ~s\n" coord-curr coord-collision)
+;           ))
          
-         ((&& (is-below coord-curr coord-end) (not (is-below-neighbor-of coord-curr coord-collision)))
-          (begin 
-            (set! coord-curr (moveUp coord-curr))
-            (printf "moveUp - ~s, coll: ~s\n" coord-curr coord-collision)  
-          ))
+;          ((&& (is-below coord-curr coord-end) (not (is-below-neighbor-of coord-curr coord-collision)))
+;           (begin 
+;             (set! coord-curr (moveUp coord-curr))
+;             (printf "moveUp - ~s, coll: ~s\n" coord-curr coord-collision)  
+;           ))
          
-         ((&& (is-above coord-curr coord-end) (not (is-above coord-curr coord-collision)))
-          (begin
-            (set! coord-curr (moveUp coord-curr))
-            (printf "moveUp - ~s, coll: ~s\n" coord-curr coord-collision)
-            (set! coord-curr (moveLeft coord-curr))
-            (printf "moveLeft - ~s, coll: ~s\n" coord-curr coord-collision)
-          ))
+;          ((&& (is-above coord-curr coord-end) (not (is-above coord-curr coord-collision)))
+;           (begin
+;             (set! coord-curr (moveUp coord-curr))
+;             (printf "moveUp - ~s, coll: ~s\n" coord-curr coord-collision)
+;             (set! coord-curr (moveLeft coord-curr))
+;             (printf "moveLeft - ~s, coll: ~s\n" coord-curr coord-collision)
+;           ))
          
-         ((&& (is-below coord-curr coord-end) (not (is-to-left coord-curr coord-collision)))
-          (begin
-            (set! coord-curr (moveRight coord-curr))
-            (printf "moveRight - ~s, coll: ~s\n" coord-curr coord-collision)
-            (set! coord-curr (moveUp coord-curr))
-            (printf "moveUp - ~s, coll: ~s\n" coord-curr coord-collision)
-          )))
+;          ((&& (is-below coord-curr coord-end) (not (is-to-left coord-curr coord-collision)))
+;           (begin
+;             (set! coord-curr (moveRight coord-curr))
+;             (printf "moveRight - ~s, coll: ~s\n" coord-curr coord-collision)
+;             (set! coord-curr (moveUp coord-curr))
+;             (printf "moveUp - ~s, coll: ~s\n" coord-curr coord-collision)
+;           )))
         
-        (assert (not (coord-equals coord-curr coord-collision))))))
-   coord-curr)
+;         (assert (not (coord-equals coord-curr coord-collision))))))
+;    coord-curr)
 
 ; (sketch-collision-one-quad-sol-2 4 coord-start coord-end coord-collision)
 
-(define (verify-tri-2)
+; (define (verify-tri-2)
 
-    (define symbol-coord-start (fresh-sym-coord))
-    (define symbol-coord-end   (fresh-sym-coord))
-    (define symbol-coord-collision   (fresh-sym-coord))
+;     (define symbol-coord-start (fresh-sym-coord))
+;     (define symbol-coord-end   (fresh-sym-coord))
+;     (define symbol-coord-collision   (fresh-sym-coord))
 
-    (define sol (verify (checker-collision-one-quad 4 sketch-collision-one-quad-sol symbol-coord-start symbol-coord-end symbol-coord-collision)))
-    ; (define sol (verify (checker-collision 4 sketch-collision-sol symbol-coord-start symbol-coord-end symbol-coord-collision)))
+;     (define sol (verify (checker-collision-one-quad 4 sketch-collision-one-quad-sol symbol-coord-start symbol-coord-end symbol-coord-collision)))
+;     ; (define sol (verify (checker-collision 4 sketch-collision-sol symbol-coord-start symbol-coord-end symbol-coord-collision)))
 
-    (if (sat? sol) 
-            (begin 
-                (printf "didn't work on following inputs:\n")
-                (displayln sol))
-            (begin
-                (printf "verified \n")))
-) 
+;     (if (sat? sol) 
+;             (begin 
+;                 (printf "didn't work on following inputs:\n")
+;                 (displayln sol))
+;             (begin
+;                 (printf "verified \n")))
+; ) 
 ; (verify-tri-2)
 ; (sketch-collision-one-quad-sol 4 (list 1 1) (list (- 3) (- 3)) (list (- 3) 0))
 ; (checker-collision-one-quad 4 sketch-collision-one-quad-sol (list 0 0) (list 1 1) (list 0 0))
@@ -908,5 +1039,13 @@ SOLUTION:
 )
 
 
-
+(define (move-diagonally coord)
+   (define coord1 (moveLeft coord))
+   (define coord2 (moveLeft coord1))
+   (define coord3 (moveLeft coord2))
+   (define coord4 (moveUp coord3))
+   (define coord5 (moveUp coord4))
+   (define coord6 (moveUp coord5))
+   coord6)
+(moveLeft (moveLeft (moveLeft (moveUp (moveUp (moveUp coord))))))
 |#
