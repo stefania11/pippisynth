@@ -35,6 +35,10 @@
 
 
 
+
+
+
+
 (define (do-synthesis checker sketch)
 
     (define symbol-coord (fresh-sym-coord))
