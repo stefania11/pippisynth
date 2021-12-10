@@ -31,6 +31,10 @@
                 (printf "no solution found\n")))
 ) 
 
+
+
+
+
 (define (do-synthesis checker sketch)
 
     (define symbol-coord (fresh-sym-coord))
