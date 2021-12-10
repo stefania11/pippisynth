@@ -23,23 +23,19 @@
 ; DEFINITIONS
 (define (moveLeft coord)
   (match coord
-    [(list x y) (list (- x 1) y)]
-    [_ "error wrong format for coordinate"]))
+    [(list x y) (list (- x 1) y)]))
 
 (define (moveRight coord)
   (match coord
-    [(list x y) (list (+ x 1) y)]
-    [_ "error wrong format for coordinate"]))
+    [(list x y) (list (+ x 1) y)]))
 
 (define (moveUp coord)
   (match coord
-    [(list x y) (list x (- y 1))]
-    [_ "error wrong format for coordinate"]))
+    [(list x y) (list x (- y 1))]))
 
 (define (moveDown coord)
   (match coord
-    [(list x y) (list x (+ y 1))]
-    [_ "error wrong format for coordinate"]))
+    [(list x y) (list x (+ y 1))]))
 
 ; GRAMMAR
 (define-grammar (moving coord)
