@@ -17,27 +17,30 @@
   "5-meeting-four-quads.rkt"
 )
 
+; require statement runs them all at once haha
+; no need to run them here also
+
 ;
 ; move once
 ;
-(do-synthesis check-left move-left)
+; (do-synthesis check-left move-left)
 
 ;
 ; move diagonally
 ;
-(do-synthesis check-diagonal move-diagonally)
+; (do-synthesis check-diagonal move-diagonally)
 
 ;
 ; move diagonally loop
 ;
-(do-synthesis check-diagonal-loop move-diagonally-loop)
+; (do-synthesis check-diagonal-loop move-diagonally-loop)
 
 ;
 ; meeting one quad
 ;
-(do-synthesis-bi checker-one-quad meeting-one-quad)
+; (do-synthesis-bi checker-one-quad meeting-one-quad)
 
 ;
 ; meeting 4 quads
 ;
-(do-synthesis-bi checker-four-quads meeting-four-quads)
+; (do-synthesis-bi checker-four-quads meeting-four-quads)

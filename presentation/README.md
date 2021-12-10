@@ -9,11 +9,11 @@ In order to run these examples, you need to have [Racket](https://download.racke
 ## File Organization
 
 ### DSL Files:
-* `moving-grammar.rkt`: contains the grammars `moving` and `bi-conditional`, as well as the functions that these grammars are made up 
+* `moving-grammar.rkt`: contains the grammars `moving` and `bi-conditional`, as well as the functions that these grammars are made up of
 
 * `for-loop.rkt`: contains our custom `for-loop` function
 
-* `synthesis.rkt`: contains 2 wrappers for calls to `synthesis` - `do-synthesis` which takes in checkers/sketches that take in 1 coordinate, and `do-synthesis-bi` which takes in checkers/sketches that take in 2 coordinates
+* `synthesis.rkt`: contains 2 wrappers for calls to Rosette's `synthesize` - `do-synthesis` which takes in checkers/sketches that take in 1 coordinate, and `do-synthesis-bi` which takes in checkers/sketches that take in 2 coordinates
 
 ### Example Files
 
@@ -53,9 +53,31 @@ Finally, run the examples with syntax `racket fileName.rkt`. Example:
 
 ```
 $ racket 1-move-left.rkt
+
 solution:
-/pathToFolder/1-move-left.rkt:19:0
+/Users/darya/Code/CSE507/pippisynth/presentation/1-move-left.rkt:20:0
 '(define (move-left coord) (moveLeft coord))
 ```
 
-If you wish to run all examples at once, you can also 
+If you wish to run all examples at once, you can also run `presentation-all.rkt`:
+
+```
+$ racket presentation-all.rkt
+
+solution:
+/Users/darya/Code/CSE507/pippisynth/presentation/1-move-left.rkt:20:0
+'(define (move-left coord) (moveLeft coord))
+
+solution:
+/Users/darya/Code/CSE507/pippisynth/presentation/2-move-diagonally.rkt:20:0
+'(define (move-diagonally coord)
+   (define coord1 (moveLeft coord))
+   (define coord2 (moveLeft coord1))
+   (define coord3 (moveLeft coord2))
+   (define coord4 (moveUp coord3))
+   (define coord5 (moveUp coord4))
+   (define coord6 (moveUp coord5))
+   coord6)
+
+...
+```
