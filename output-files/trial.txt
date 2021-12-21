@@ -1,0 +1,82 @@
+
+(ite* (⊢ 
+var3 1) (⊢ (&& 
+var4 (! 
+var3)) (+ 1 (ite* (⊢ 
+var1 1) (⊢ (&& 
+var2 (! 
+var1)) (+ 1 sym-x)) (⊢ (&& (! 
+var1) (! 
+var2)) (+ -1 sym-x))))) (⊢ (&& (! 
+var3) (! 
+var4)) (+ -1 (ite* (⊢ 
+var1 1) (⊢ (&& 
+var2 (! 
+var1)) (+ 1 sym-x)) (⊢ (&& (! 
+var1) (! 
+var2)) (+ -1 sym-x))))))
+
+
+(model
+ [var1 #f]
+ [var2 #t]
+ [0$choose:small-grammar:11:4$expr:small-grammar:13:14$choose:small-grammar:11:4$expr:small-grammar:10:3$simple:small-grammar:41:16 #t]
+ [1$choose:small-grammar:11:4$expr:small-grammar:13:14$choose:small-grammar:11:4$expr:small-grammar:10:3$simple:small-grammar:41:16 #f]
+ [0$choose:small-grammar:11:4$expr:small-grammar:14:14$choose:small-grammar:11:4$expr:small-grammar:10:3$simple:small-grammar:41:16 #f]
+ [1$choose:small-grammar:11:4$expr:small-grammar:14:14$choose:small-grammar:11:4$expr:small-grammar:10:3$simple:small-grammar:41:16 #f]
+ [var3 #f]
+ [var4 #t]
+ [0$choose:small-grammar:11:4$expr:small-grammar:13:14$choose:small-grammar:11:4$expr:small-grammar:10:3$simple:small-grammar:42:16 #t]
+ [1$choose:small-grammar:11:4$expr:small-grammar:13:14$choose:small-grammar:11:4$expr:small-grammar:10:3$simple:small-grammar:42:16 #f]
+ [0$choose:small-grammar:11:4$expr:small-grammar:14:14$choose:small-grammar:11:4$expr:small-grammar:10:3$simple:small-grammar:42:16 #f]
+ [1$choose:small-grammar:11:4$expr:small-grammar:14:14$choose:small-grammar:11:4$expr:small-grammar:10:3$simple:small-grammar:42:16 #f])
+
+
+
+
+
+
+
+ (ite* (⊢ 
+ var5 1) (⊢ (&& 
+ var6 (! 
+ var5)) (+ 1 (ite* (⊢ 
+ var7 1) (⊢ (&& 
+ var8 (! 
+ var7)) (+ 1 sym-x)) (⊢ (&& (! 
+ var7) (! 
+ var8)) (+ -1 sym-x))))) (⊢ (&& (! 
+ var5) (! 
+ var6)) (+ -1 (ite* (⊢ 
+ var7 1) (⊢ (&& 
+ var8 (! 
+ var7)) (+ 1 sym-x)) (⊢ (&& (! 
+ var7) (! 
+ var8)) (+ -1 sym-x))))))
+
+
+ (model
+ [var5 #f]
+ [var6 #t]
+ [var7 #f]
+ [var8 #t]
+ [0$choose:small-grammar:11:4$expr:small-grammar:13:14$choose:small-grammar:11:4$expr:small-grammar:10:3$simple:small-grammar:94:13$choose:small-grammar:11:4$expr:small-grammar:10:3$simple:small-grammar:94:5 #t]
+ [1$choose:small-grammar:11:4$expr:small-grammar:13:14$choose:small-grammar:11:4$expr:small-grammar:10:3$simple:small-grammar:94:13$choose:small-grammar:11:4$expr:small-grammar:10:3$simple:small-grammar:94:5 #f]
+ [0$choose:small-grammar:11:4$expr:small-grammar:14:14$choose:small-grammar:11:4$expr:small-grammar:10:3$simple:small-grammar:94:13$choose:small-grammar:11:4$expr:small-grammar:10:3$simple:small-grammar:94:5 #f]
+ [1$choose:small-grammar:11:4$expr:small-grammar:14:14$choose:small-grammar:11:4$expr:small-grammar:10:3$simple:small-grammar:94:13$choose:small-grammar:11:4$expr:small-grammar:10:3$simple:small-grammar:94:5 #f]
+ [0$choose:small-grammar:11:4$expr:small-grammar:13:14$choose:small-grammar:11:4$expr:small-grammar:10:3$simple:small-grammar:94:5 #t]
+ [1$choose:small-grammar:11:4$expr:small-grammar:13:14$choose:small-grammar:11:4$expr:small-grammar:10:3$simple:small-grammar:94:5 #f]
+ [0$choose:small-grammar:11:4$expr:small-grammar:10:3$simple:small-grammar:94:13$choose:small-grammar:11:4$expr:small-grammar:13:14$choose:small-grammar:11:4$expr:small-grammar:10:3$simple:small-grammar:94:5 #f]
+ [1$choose:small-grammar:11:4$expr:small-grammar:10:3$simple:small-grammar:94:13$choose:small-grammar:11:4$expr:small-grammar:13:14$choose:small-grammar:11:4$expr:small-grammar:10:3$simple:small-grammar:94:5 #f]
+ [0$choose:small-grammar:11:4$expr:small-grammar:13:14$choose:small-grammar:11:4$expr:small-grammar:10:3$simple:small-grammar:94:13$choose:small-grammar:11:4$expr:small-grammar:13:14$choose:small-grammar:11:4$expr:small-grammar:10:3$simple:small-grammar:94:5 #f]
+ [1$choose:small-grammar:11:4$expr:small-grammar:13:14$choose:small-grammar:11:4$expr:small-grammar:10:3$simple:small-grammar:94:13$choose:small-grammar:11:4$expr:small-grammar:13:14$choose:small-grammar:11:4$expr:small-grammar:10:3$simple:small-grammar:94:5 #f]
+ [0$choose:small-grammar:11:4$expr:small-grammar:14:14$choose:small-grammar:11:4$expr:small-grammar:10:3$simple:small-grammar:94:13$choose:small-grammar:11:4$expr:small-grammar:13:14$choose:small-grammar:11:4$expr:small-grammar:10:3$simple:small-grammar:94:5 #f]
+ [1$choose:small-grammar:11:4$expr:small-grammar:14:14$choose:small-grammar:11:4$expr:small-grammar:10:3$simple:small-grammar:94:13$choose:small-grammar:11:4$expr:small-grammar:13:14$choose:small-grammar:11:4$expr:small-grammar:10:3$simple:small-grammar:94:5 #f]
+ [0$choose:small-grammar:11:4$expr:small-grammar:14:14$choose:small-grammar:11:4$expr:small-grammar:10:3$simple:small-grammar:94:5 #f]
+ [1$choose:small-grammar:11:4$expr:small-grammar:14:14$choose:small-grammar:11:4$expr:small-grammar:10:3$simple:small-grammar:94:5 #f]
+ [0$choose:small-grammar:11:4$expr:small-grammar:10:3$simple:small-grammar:94:13$choose:small-grammar:11:4$expr:small-grammar:14:14$choose:small-grammar:11:4$expr:small-grammar:10:3$simple:small-grammar:94:5 #f]
+ [1$choose:small-grammar:11:4$expr:small-grammar:10:3$simple:small-grammar:94:13$choose:small-grammar:11:4$expr:small-grammar:14:14$choose:small-grammar:11:4$expr:small-grammar:10:3$simple:small-grammar:94:5 #f]
+ [0$choose:small-grammar:11:4$expr:small-grammar:13:14$choose:small-grammar:11:4$expr:small-grammar:10:3$simple:small-grammar:94:13$choose:small-grammar:11:4$expr:small-grammar:14:14$choose:small-grammar:11:4$expr:small-grammar:10:3$simple:small-grammar:94:5 #f]
+ [1$choose:small-grammar:11:4$expr:small-grammar:13:14$choose:small-grammar:11:4$expr:small-grammar:10:3$simple:small-grammar:94:13$choose:small-grammar:11:4$expr:small-grammar:14:14$choose:small-grammar:11:4$expr:small-grammar:10:3$simple:small-grammar:94:5 #f]
+ [0$choose:small-grammar:11:4$expr:small-grammar:14:14$choose:small-grammar:11:4$expr:small-grammar:10:3$simple:small-grammar:94:13$choose:small-grammar:11:4$expr:small-grammar:14:14$choose:small-grammar:11:4$expr:small-grammar:10:3$simple:small-grammar:94:5 #f]
+ [1$choose:small-grammar:11:4$expr:small-grammar:14:14$choose:small-grammar:11:4$expr:small-grammar:10:3$simple:small-grammar:94:13$choose:small-grammar:11:4$expr:small-grammar:14:14$choose:small-grammar:11:4$expr:small-grammar:10:3$simple:small-grammar:94:5 #f])
